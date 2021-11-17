@@ -30,11 +30,12 @@ router.get('/add/:user/:password', function (req, res, next) {
     //Hashes password
     bcrypt.hash(password, 10, (err, hash) => {
 
+        // Adds user into database
         var addUserQuery = 'insert into logins(username, password) values("' + username + '", "' + hash + '")';
         connection.query(addUserQuery, (err, rows) => {
 
             if (err) console.log(err);
-            else console.log(rows);
+            res.json(rows);
 
         });
 

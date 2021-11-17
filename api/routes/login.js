@@ -8,6 +8,7 @@ router.get('/:user/:password', function (req, res, next) {
     var username = req.params["user"];
     var password = req.params["password"];
 
+    // Hashes password
     bcrypt.hash(password, 10, (err, hash) => {
 
         var data = { Username: username, Password: hash };

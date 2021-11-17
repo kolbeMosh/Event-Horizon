@@ -34,8 +34,14 @@ router.get('/add/:user/:password', function (req, res, next) {
         var addUserQuery = 'insert into logins(username, password) values("' + username + '", "' + hash + '")';
         connection.query(addUserQuery, (err, rows) => {
 
-            if (err) console.log(err);
-            res.json(rows);
+            if (err) {
+
+                console.log(err);
+                res.json({ Status: "Error" });
+
+            }
+
+            else res.json(rows);
 
         });
 
@@ -50,14 +56,30 @@ router.get('/login/:user/:password', function (req, res, next) {
     var username = req.params["user"];
     var password = req.params["password"];
 
-    //Hashes password
-    bcrypt.hash(password, 10, (err, hash) => {
+    // Looks for user in database
+    var addUserQuery = 'select * from logins where username="' + username + '"';
+    connection.query(addUserQuery, (err, rows) => {
 
-        var data = { Username: username, Password: hash };
-        res.json(data);
+        if (err) {
+
+            console.log(err);
+            res.json({});
+
+        } else {
+
+            console.log(rows[0]["password"]);
+            bcrypt.compare(password, rows[0]["password"], (err, cmp) => {
+
+                if (err) console.log(err);
+                if (cmp) res.json({ Status: "Ok" });
+                else res.json({ Status: "Error" });
+
+
+            })
+
+        }
 
     });
-
 
 });
 

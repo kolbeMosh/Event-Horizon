@@ -67,15 +67,13 @@ router.get('/login/:user/:password', function (req, res, next) {
 
         } else {
 
-            console.log(rows[0]["password"]);
-            bcrypt.compare(password, rows[0]["password"], (err, cmp) => {
+            // Compares password to one in database
+            bcrypt.compare(password, rows[0]["password"], (err, res2) => {
 
-                if (err) console.log(err);
-                if (cmp) res.json({ Status: "Ok" });
-                else res.json({ Status: "Error" });
+                if (res2) res.json({ Status: "Ok" });
+                else res.json({ Status: "Bad" });
 
-
-            })
+            });
 
         }
 

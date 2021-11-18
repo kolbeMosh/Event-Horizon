@@ -20,6 +20,10 @@ connection.connect((err) => {
 
 });
 
-// Adds message to database
+router.get('/create/:name', (req, res) => {
+
+
+
+});
 
 module.exports = router;

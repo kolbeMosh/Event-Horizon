@@ -6,11 +6,15 @@ const isDev = require('electron-is-dev');
 function createWindow() {
   // Create the browser window.
   const win = new BrowserWindow({
-    width: 800,
-    height: 600,
+    titleBarStyle: 'hidden',
+    frame: false, // removes the app frame from the window
+    width: 800, 
+    height: 600, 
     frame: false,
     webPreferences: {
+      // implement dark mode later on https://www.electronjs.org/docs/latest/tutorial/dark-mode
       nodeIntegration: true,
+      zoomFactor: 1.00 
     },
   });
 

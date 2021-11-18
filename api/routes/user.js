@@ -30,20 +30,28 @@ router.get('/add/:user/:password', function (req, res, next) {
     //Hashes password
     bcrypt.hash(password, 10, (err, hash) => {
 
-        // Adds user into database
-        var addUserQuery = 'insert into logins(username, password) values("' + username + '", "' + hash + '")';
-        connection.query(addUserQuery, (err, rows) => {
+        // Grabs last id number
+        var userIdQuery = "select id from users";
+        connection.query(userIdQuery, (err, rows) => {
 
-            if (err) {
+            var nextID = rows[rows.length - 1]["id"] + 1;
 
-                console.log(err);
-                res.json({ Status: "Error" });
+            var addUserQuery = 'insert into users(id, username, password) values(' + nextID + ', "' + username + '", "' + hash + '")';
+            connection.query(addUserQuery, (err2, rows2) => {
 
-            }
+                if (err2) {
 
-            else res.json(rows);
+                    console.log(err2);
+                    res.json({ Status: "Could not create user " + username });
+
+                }
+
+                else res.json({ Status: "Ok" });
+
+            });
 
         });
+
 
     });
 
@@ -57,13 +65,13 @@ router.get('/login/:user/:password', function (req, res, next) {
     var password = req.params["password"];
 
     // Looks for user in database
-    var addUserQuery = 'select * from logins where username="' + username + '"';
+    var addUserQuery = 'select * from users where username="' + username + '"';
     connection.query(addUserQuery, (err, rows) => {
 
         if (err) {
 
             console.log(err);
-            res.json({});
+            res.json({ Status: "Could not find user " + username });
 
         } else {
 
@@ -71,7 +79,7 @@ router.get('/login/:user/:password', function (req, res, next) {
             bcrypt.compare(password, rows[0]["password"], (err, res2) => {
 
                 if (res2) res.json({ Status: "Ok" });
-                else res.json({ Status: "Bad" });
+                else res.json({ Status: "Wrong password" });
 
             });
 

@@ -1,4 +1,5 @@
 body {
+  background-color: #000a7e;
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
@@ -8,9 +9,10 @@ body {
 }
 
 
+/* 
 body::-webkit-scrollbar {
   display: none;
-}
+} */
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',

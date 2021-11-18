@@ -1,20 +1,25 @@
 const path = require('path');
-
 const { app, BrowserWindow } = require('electron');
 const isDev = require('electron-is-dev');
 
 function createWindow() {
   // Create the browser window.
+  const { screen } = require('electron')
+  
+
+  // Dividing the width and height by this factor allows
+  // Electron app pixels to scale directly with the computer pixels
+  let factor = screen.getPrimaryDisplay().scaleFactor;
+
   const win = new BrowserWindow({
     titleBarStyle: 'hidden',
     frame: false, // removes the app frame from the window
-    width: 800, 
-    height: 600, 
-    frame: false,
+    width: 500 / factor, 
+    height: 700 / factor, 
     webPreferences: {
       // implement dark mode later on https://www.electronjs.org/docs/latest/tutorial/dark-mode
       nodeIntegration: true,
-      zoomFactor: 1.00 
+      zoomFactor: 1.00 / factor 
     },
   });
 

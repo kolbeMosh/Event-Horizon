@@ -34,8 +34,10 @@ router.get('/add/:user/:password', function (req, res, next) {
         var userIdQuery = "select id from users";
         connection.query(userIdQuery, (err, rows) => {
 
+            // Finds new ID for user
             var nextID = rows[rows.length - 1]["id"] + 1;
 
+            // Adds new user to database
             var addUserQuery = 'insert into users(id, username, password) values(' + nextID + ', "' + username + '", "' + hash + '")';
             connection.query(addUserQuery, (err2, rows2) => {
 

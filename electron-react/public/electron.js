@@ -13,7 +13,7 @@ function createWindow() {
 
   const win = new BrowserWindow({
     titleBarStyle: 'hidden',
-    frame: false, // removes the app frame from the window
+    frame: true, // removes the app frame from the window if false- set to true for dev -KH
     width: 500 / factor, 
     height: 700 / factor, 
     webPreferences: {

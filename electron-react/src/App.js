@@ -1,15 +1,18 @@
-import './styles/App.css';
+import styles from './styles/App.module.css';
 import Home from './pages/home'
 
 function App() {
 
   return (
-    <div>
+    <body>
+      <div className={styles.main}>
 
-      <h1>Logo</h1>
-      <Home />
+        <h1 className={styles.logo}>Logo</h1>
+        <Home />
 
-    </div>
+      </div>
+    </body>
+
   );
 }
 

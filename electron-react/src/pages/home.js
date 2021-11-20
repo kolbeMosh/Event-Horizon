@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import styles from '../styles/styles.module.css'
+import styles from '../styles/home.module.css'
 
 export default class Home extends Component {
 
@@ -25,15 +25,11 @@ export default class Home extends Component {
 
         return (
             <div>
-                <div>
-                    <ul className={styles.login}>
-                        <li style={ {listStyleType: "none" } }><input type="text" placeholder="Username"></input></li>
-                        <li style={ {listStyleType: "none" } }><input type="password" placeholder="Password"></input></li>
-                    </ul>
+                <div className={styles.login}>
+                    <input type="text" placeholder="Username"></input>
+                    <input type="password" placeholder="Password"></input>
                 </div>
             </div>
-
-        
         );
 
     }

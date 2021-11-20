@@ -20,19 +20,59 @@ connection.connect((err) => {
 
 });
 
-// Adds message to database
-router.get('/send/:serverID/:date/:message', function (req, res, next) {
+// Gets message from database
+router.get('/get/:serverName/:serverID', (req, res) => {
 
-    var serverID = req.params["serverID"];
-    var date = req.params["date"];
-    var message = req.params["message"];
+    var serverName = req.params['serverName'];
+    var serverID = req.params['serverID'];
 
-    var messageJSON = { Date: date, Message: message };
-
-    var getMessageQuery = 'select * from server where id=' + serverID;
-    connection.query(getMessageQuery, (err, rows) => {
+    // Get message table for requested server
+    var messageTableQuery = 'select * from ' + serverName + '' + serverID + 'Messages';
+    connection.query(messageTableQuery, (err, rows) => {
 
         res.json(rows);
+
+    });
+
+});
+
+// Adds message to database
+router.get('/send/:serverName/:serverID/:message', (req, res) => {
+
+    var serverName = req.params['serverName'];
+    var serverID = req.params['serverID'];
+    var message = req.params['message'];
+
+    var messageTable = serverName + '' + serverID + 'Messages';
+
+    // Get last message id
+    var messageIdQuery = 'select * from ' + messageTable;
+    connection.query(messageIdQuery, (err, rows) => {
+
+        // Gets next id
+        var lastID = parseInt(rows[rows.length - 1]['id'], 16);
+        var nextID = (lastID + 1).toString(16);
+
+        // Gets current date
+        var date = new Date();
+        var dateString = date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate();
+
+        // Add message to database
+        var addMessageQuery = 'insert into ' + messageTable + '(id, dateSent, message) values("' + nextID + '", "' + dateString + '", "' + message + '")';
+        connection.query(addMessageQuery, (err, rows) => {
+
+            if (err) {
+
+                console.log(err);
+                res.json({ Staus: "Could not send message" });
+
+            } else {
+
+                res.json({ Status: "Ok" });
+
+            }
+
+        });
 
     });
 

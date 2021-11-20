@@ -37,8 +37,12 @@ router.get('/add/:user/:password', function (req, res, next) {
             // Finds new ID for user
             var nextID = rows[rows.length - 1]["id"] + 1;
 
+            // Gets current date
+            var date = new Date();
+            var dateString = date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate();
+
             // Adds new user to database
-            var addUserQuery = 'insert into users(id, username, password) values(' + nextID + ', "' + username + '", "' + hash + '")';
+            var addUserQuery = 'insert into users(id, username, password, dateCreated) values(' + nextID + ', "' + username + '", "' + hash + '", "' + dateString + '")';
             connection.query(addUserQuery, (err2, rows2) => {
 
                 if (err2) {

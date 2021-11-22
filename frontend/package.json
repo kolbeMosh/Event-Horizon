@@ -2,8 +2,7 @@
   "name": "frontend",
   "private": true,
   "scripts": {
-    "dev": "concurrently -k \"BROWSER=none npm test\" \"npm:electron\"",
-    "test": "next dev",
+    "dev": "concurrently -k \"BROWSER=none next dev\" \"npm:electron\"",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",

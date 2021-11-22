@@ -1,0 +1,23 @@
+.container {
+    position: absolute;
+    height: 100vh;
+    width: 100vw;
+    margin: 0;
+    padding: 0;
+    top: 0;
+    left: 0;
+    background: linear-gradient(125deg, rgba(2,0,36,1) 0%, rgba(9,9,121,1) 35%, rgba(0,212,255,1) 100%);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+  
+.login {
+    color: white;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}

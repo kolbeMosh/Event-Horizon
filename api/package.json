@@ -1,16 +1,16 @@
 {
-  "dependencies": {
-    "cors": "^2.8.5",
-    "express": "^4.17.1",
-    "mysql": "^2.18.1"
-  },
-  "scripts": {
-    "start": "node server.js"
-  },
-  "name": "api",
-  "version": "1.0.0",
-  "main": "server.js",
-  "author": "",
-  "license": "GPL-3.0",
-  "description": ""
+    "dependencies": {
+        "cors": "^2.8.5",
+        "express": "^4.17.1",
+        "mysql": "^2.18.1"
+    },
+    "scripts": {
+        "start": "node server.js"
+    },
+    "name": "api",
+    "version": "1.0.0",
+    "main": "server.js",
+    "author": "magnuschase03",
+    "license": "GPL-3.0",
+    "description": "API for the app Event Horizon"
 }

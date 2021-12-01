@@ -15,34 +15,57 @@ function requestFromApp(req) {
 
 }
 
+// Create a date string for MYSQL
+function getDateString() {
+
+    var date = new Date();
+    var dateString = date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate();
+
+    return dateString;
+
+}
+
 // Routes
 app.get('/user/add/:username/:password', (req, res) => {
 
+    // TODO: Remove negation for actual product!!!
     if (!requestFromApp(req)) {
 
-        // Gets current date
-        var date = new Date();
-        var dateString = date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate();
+        // Adds the user to database
 
-        // Add User To Database
-
-        // TODO: Create Custom ID
-        var query = 'insert into users(id, username, password, dateCreated) values("0", "' + req.params['username'] + '", "' + req.params['password'] + '", "' + dateString + '")';
-
+        // Get ids of the current users
+        var query = 'select id from users where username="' + req.params['username'] + '"';
         database.query(query, (err, rows) => {
 
-            if (err) {
+            // Creates new user ID
+            var newID = 0;
+            if (rows.length != 0) {
 
-                console.log(err);
-                res.json({ Status: 'Could not create user' })
-
-            } else {
-
-                res.json(rows);
+                var lastId = parseInt(rows[rows.length - 1]['id'], 16);
+                newID = (lastId + 1).toString(16);
 
             }
 
+            query = 'insert into users(id, username, password, dateCreated) values("' + newID + '", "' + req.params['username'] + '", "' + req.params['password'] + '", "' + getDateString() + '")';
+
+
+            database.query(query, (err, rows) => {
+
+                if (err) {
+
+                    console.log(err);
+                    res.json({ Status: 'Could not create user' })
+
+                } else {
+
+                    res.json(rows);
+
+                }
+
+            });
+
         });
+
 
     } else {
 

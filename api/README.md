@@ -17,4 +17,4 @@ The user route is used to add users and gain information about them. So far, the
 
 **Server Route**
 
-The server route is used for creating new servers and getting all of their messages. There is only one subroute so far and it is `/server/add/:serverName`. The response will be **200** if it created the server sucsesfully, else it will return an error code **406**.
+The server route is used for creating new servers and getting all of their messages. There are three subroute so far and it is `/server/add/:serverName`, `/server/message/send/:serverName-:serverID/:message`, and `/server/message/get/:serverName-:serverID`. The response will be **200** if it created the server sucsesfully, else it will return an error code **406**. When getting messages instead of just returning response code **200**, it will return the **JSON** of the messages.

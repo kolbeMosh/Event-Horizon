@@ -20,7 +20,7 @@ function requestFromApp(req) {
 function getDateString() {
 
     var date = new Date();
-    var dateString = date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate();
+    var dateString = date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate() + ' ' + date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds();
 
     return dateString;
 
@@ -155,7 +155,6 @@ app.get('/server/add/:serverName', (req, res) => {
                     query = 'create table ' + req.params['serverName'] + newID + 'Messages(message varchar(255), dateSent date)';
                     database.query(query, (err, rows) => {
 
-
                         if (err) {
 
                             console.log(err);
@@ -185,6 +184,48 @@ app.get('/server/add/:serverName', (req, res) => {
 
 });
 
+// Sends message to server
+app.get('/server/message/send/:serverName-:serverID/:message', (req, res) => {
+
+    if (!requestFromApp(req)) {
+
+        var query = 'insert into ' + req.params['serverName'] + req.params['serverID'] + 'Messages(message, dateSent) values("' + req.params['message'] + '", "' + getDateString() + '")';
+        database.query(query, (err, rows) => {
+
+            if (err) {
+
+                console.log(err);
+                res.sendStatus(406); // Not Acceptable
+
+            } else {
+
+                res.sendStatus(200); // Ok
+
+            }
+
+        });
+
+    }
+
+});
+
+// Grab messages from servers
+app.get('/server/message/get/:serverName-:serverID', (req, res) => {
+
+    if (!requestFromApp(req)) {
+
+        // Grab all users
+        var query = 'select * from ' + req.params['serverName'] + req.params['serverID'] + 'Messages';
+        database.query(query, (err, rows) => {
+
+            res.json(rows);
+
+        });
+
+    }
+
+});
+
 // Grab all users for testing ONLY
 app.get('/users', (req, res) => {
 
@@ -209,23 +250,6 @@ app.get('/servers', (req, res) => {
 
         // Grab all users
         var query = 'select * from servers';
-        database.query(query, (err, rows) => {
-
-            res.json(rows);
-
-        });
-
-    }
-
-});
-
-// Grab messages from servers for testing ONLY
-app.get('/messages/:server-:id', (req, res) => {
-
-    if (!requestFromApp(req)) {
-
-        // Grab all users
-        var query = 'select * from ' + req.params['server'] + req.params['id'] + 'Messages';
         database.query(query, (err, rows) => {
 
             res.json(rows);

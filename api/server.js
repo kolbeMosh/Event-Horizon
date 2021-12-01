@@ -2,6 +2,7 @@
 const express = require('express');
 const cors = require('cors');
 const mysql = require('mysql');
+const crypto = require('crypto');
 
 // Setting up api
 var app = express();
@@ -29,7 +30,7 @@ function getDateString() {
 app.get('/user/add/:username/:password', (req, res) => {
 
     // TODO: Remove negation for actual product!!!
-    if (!requestFromApp(req)) {
+    if (requestFromApp(req)) {
 
         // Adds the user to database
 
@@ -46,8 +47,11 @@ app.get('/user/add/:username/:password', (req, res) => {
 
             }
 
-            query = 'insert into users(id, username, password, dateCreated) values("' + newID + '", "' + req.params['username'] + '", "' + req.params['password'] + '", "' + getDateString() + '")';
+            // Hash password
+            var passwordHash = crypto.createHash('md5').update(req.params['password']).digest('hex');
 
+            // Adding the user to the database
+            query = 'insert into users(id, username, password, dateCreated) values("' + newID + '", "' + req.params['username'] + '", "' + passwordHash + '", "' + getDateString() + '")';
 
             database.query(query, (err, rows) => {
 

@@ -135,6 +135,47 @@ app.get('/user/login/:username-:id@:password', (req, res) => {
 
 });
 
+// Adds server to user account
+app.get('/user/join/:username-:userID@:serverID', (req, res) => {
+
+    if (!requestFromApp(req)) {
+
+        // Get server data
+        var query = 'select * from servers where id="' + req.params['serverID'] + '"';
+        database.query(query, (err, rows) => {
+
+            if (rows.length == 0) {
+
+                res.sendStatus(406); // Not Acceptable
+
+            } else {
+
+                // Add basic server information to user table
+                query = 'insert into ' + req.params['username'] + req.params['userID'] + 'Servers(serverID, serverName) values("' + rows[0]['id'] + '", "' + rows[0]['name'] + '")';
+
+                database.query(query, (err, rows) => {
+
+                    if (err) {
+
+                        console.log(err);
+                        res.sendStatus(406); // Not Acceptable
+
+                    } else {
+
+                        res.sendStatus(200); // OK
+
+                    }
+
+                });
+
+            }
+
+        });
+
+    }
+
+});
+
 // Creates a new server
 app.get('/server/add/:serverName', (req, res) => {
 

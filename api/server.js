@@ -54,11 +54,12 @@ app.get('/user/add/:username@:password', (req, res) => {
         var query = 'select id from users';
         database.query(query, (err, rows) => {
 
-            // Hash password
+            // Hash password and create an ID
             var passwordHash = crypto.createHash('md5').update(req.params['password']).digest('hex');
+            var newID = createID(rows);
 
             // Adding the user to the database
-            query = 'insert into users(id, username, password, dateCreated) values("' + createID(rows) + '", "' + req.params['username'] + '", "' + passwordHash + '", "' + getDateString() + '")';
+            query = 'insert into users(id, username, password, dateCreated) values("' + newID + '", "' + req.params['username'] + '", "' + passwordHash + '", "' + getDateString() + '")';
 
             database.query(query, (err, rows) => {
 
@@ -69,7 +70,14 @@ app.get('/user/add/:username@:password', (req, res) => {
 
                 } else {
 
-                    res.sendStatus(200); // OK
+                    // Create table containg the servers the user is in
+                    query = 'create table ' + req.params['username'] + newID + 'Servers(serverID varchar(255), serverName varchar(255))';
+                    database.query(query, (err, rows) => {
+
+                        res.sendStatus(200); // OK
+
+                    });
+
 
                 }
 
@@ -216,40 +224,6 @@ app.get('/server/message/get/:serverName-:serverID', (req, res) => {
 
         // Grab all users
         var query = 'select * from ' + req.params['serverName'] + req.params['serverID'] + 'Messages';
-        database.query(query, (err, rows) => {
-
-            res.json(rows);
-
-        });
-
-    }
-
-});
-
-// Grab all users for testing ONLY
-app.get('/users', (req, res) => {
-
-    if (!requestFromApp(req)) {
-
-        // Grab all users
-        var query = 'select * from users';
-        database.query(query, (err, rows) => {
-
-            res.json(rows);
-
-        });
-
-    }
-
-});
-
-// Grab all servers for testing ONLY
-app.get('/servers', (req, res) => {
-
-    if (!requestFromApp(req)) {
-
-        // Grab all users
-        var query = 'select * from servers';
         database.query(query, (err, rows) => {
 
             res.json(rows);

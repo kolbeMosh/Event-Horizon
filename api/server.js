@@ -71,7 +71,7 @@ app.get('/user/add/:username@:password', (req, res) => {
                 } else {
 
                     // Create table containg the servers the user is in
-                    query = 'create table ' + req.params['username'] + newID + 'Servers(serverID varchar(255), serverName varchar(255))';
+                    query = 'create table ' + req.params['username'] + newID + 'Servers(serverID varchar(255) unique, serverName varchar(255))';
                     database.query(query, (err, rows) => {
 
                         res.sendStatus(200); // OK
